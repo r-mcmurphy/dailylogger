@@ -1,45 +1,77 @@
+import datetime
+import json
+
+CONFIG_FILE = "config.json"
+LOG_FILE = "daily_log.json"
+
 class DailyLogger():
-	def __init__(self):			# I decided to get rid of schedule here. Instead, logger recounts trackables
-		self.trackables = []	# for a particular day of interest. So we don't have to think about
-								# how to store this information.
+	def __init__(self):
+		self.trackables = []
+		self.get_trackables()
+
+	def get_trackables(self):
+		with open(CONFIG_FILE) as f:
+			data = json.load(f)
+		for t in data["trackables"]:
+			self.trackables.append(Trackable(t["name"], t["question"], t["period"]))
+
 	def log_day(self):
-		# Create list of trackackables for the day of interest
-		day_of_interest = self.get_day()
+		day = self.get_day()
 		to_log = []
 		for trackable in self.trackables:
-			if trackable.on_schedule(day_of_interest):
+			if trackable.on_schedule(day): # Maybe this can be changed - let logger cares about scheduling
 				to_log.append(trackable)
-		# Now we need to create the log entry
+
 		entry = {}
 		for trackable in to_log:
 			entry[trackable.id] = self.request_input(trackable)
-		# Now let's save this data in some form: JSON of database - depends on save()
-		self.save(entry)
+		self.save(day, entry)
 
-	def get_day(self):
-		pass
+	def get_day(self): # This can be improved - think of all possible use cases
+		td = datetime.datetime.now()
+		datestr = td.strftime("%Y-%m-%d")
+		return datestr
 
 	def request_input(self, trackable):
-		pass
+		answer = input(trackable.question)
+		if trackable.answer_valid(answer):
+			return answer
+		else:
+			return False
 
-	def save(self, entry):
+	def get_data():
+		with open(LOG_FILE) as f:
+			data = json.load(f)
+		return data
+
+	def save_data(data):
+		with open(LOG_FILE, "w") as f:
+			json.dump(data, f, indent=2, sort_keys=True)
+
+	def save(self, day, entry):
+		data = self.get_data()
+		data[day] = entry
+		self.save_data(data)
+
+	def add_trackable(self):
 		pass
 
 
 class Trackable():
-	"""docstring for Trackable"""
-	_ID = 0
-	def __init__(self):
-		# self.question = question
-		self.id = self._ID
-		self.__class__._ID += 1
+	
+	# Maybe a good way is to save this data in JSON, alongside all the trackables info.
+	# This would allow us to keep all trackable info in one place and it would guarantee
+	# that we'll be able to keep incrementing ids after program's restart.
+	# Or maybe even better idea - create a separate config file where to store all the
+	# data on trackables. It can be JSON as well.
 
-t = Trackable()
-t1 = Trackable()
-t2 = Trackable()
-t3 = Trackable()
-print(t.id)
-print(t1.id)
-print(t2.id)
-print(t3.id)
-print(Trackable._ID)
+	def __init__(self, name, question, period=None):
+		self.name = name
+		self.question = question
+		self.period = period
+
+	def on_schedule(self, day):
+		pass
+
+	def set_period(self, period):
+		pass
