@@ -2,12 +2,14 @@ import os
 import sys
 import json
 import datetime
+from trackable import Trackable, Validator
 
 
 CONFIG_FILE = "config.json"
 LOG_FILE = "daily_log.json"
 
 class DailyLogger():
+	
 	def __init__(self):
 		self.check_files()
 		self.trackables = []
@@ -68,25 +70,3 @@ class DailyLogger():
 			for k in entry[day].keys():
 				data[day][k] = entry[day][k]
 		self.save_log_data(data)
-
-
-class Trackable():
-
-	def __init__(self, name, question, answer_type, period=None):
-		self.name = name.strip().lower().replace(" ", "_")
-		self.question = question.strip()
-		self.period = period
-		self.answer_type = answer_type
-
-	def get_type(self):
-		if self.answer_type == "bool":
-			return bool
-		elif self.answer_type == "int":
-			return int
-		elif self.answer_type == "str":
-			return str
-		elif self.answer_type == "float":
-			return float
-
-	def set_period(self, period):
-		pass
