@@ -48,10 +48,8 @@ class DailyLogger():
 		self.trackables.append(t)
 		self.save_trackables()
 
-	def delete_trackable(self, name):
-		for t in self.trackables:
-			if t.name == name:
-				self.trackables.remove(t)
+	def delete_trackable(self, t):
+		self.trackables.remove(t)
 		self.save_trackables()
 
 	def get_trackables_of_day(self, day):

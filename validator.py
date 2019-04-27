@@ -4,10 +4,25 @@ class Validator():
 		self.types = ["int", "float", "str", "bool", ""]
 		self.falses = ["no", "false", "nope", "0", "never", "noway", "n"]
 
-	def validate_type_input(self, inp):
+	def validate_input_type(self, inp):
 		if inp not in self.types:
 			return False
 		return True
+
+	def validate_name(self, name, trackables):
+		if name == "":
+			return False
+		for t in trackables:
+			if t.name == name:
+				return False
+		else:
+			return True
+
+	def validate_question(self, question):
+		if question == "":
+			return False
+		else:
+			return True
 
 	def validate_answer(self, ans, trackable):
 		"""Returns False if answer is of incorrect type."""

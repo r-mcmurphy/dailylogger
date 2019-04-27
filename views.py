@@ -28,7 +28,7 @@ def home_view():
 		print("  'l'   -->   list all trackables")
 		print("  's'   -->   show log contents")
 		print("  'q'   -->   exit\n")
-		inp = input("What should I do? ").strip().lower()
+		inp = input("What do you want? ").strip().lower()
 		if inp == "":
 			logger_view()
 		elif inp == "n":
@@ -80,20 +80,14 @@ def logger_view():
 def logger_confirmation_view(day):
 	while 1:
 		clear()
-		print("Life Logger v.2.0\n")
-		print("  You're about to log {}".format(day))
-		print("    Enter  >  continue")
-		print("    'l'    >  back to logger menu")
-		print("    'q'    >  quit\n")
-		inp = input("So?: ").strip().lower()
+		# print("Life Logger v.2.0\n")
+		print("\n\n  You're about to log {}".format(day))
+		print("    Enter   >  continue")
+		print("    anychar >  abort\n")
+		inp = input("Going on?: ").strip().lower()
 		if inp == "":
 			logger_user_input_view(day)
-		elif inp == "l":
-			break
-		elif inp == "q":
-			clear()
-			sys.exit()
-		else: pass
+		else: break
 
 def logger_user_input_view(day):
 	entry = {}
@@ -119,20 +113,24 @@ def show_log_view():
 	with open (LOG_FILE, "r") as f:
 		for line in f:
 			print(line, end="")
-	input("\n\nPress Enter to quit")
-	clear()
-	sys.exit()
+	input("\n\nPress Enter")
 
 def creation_view():	
-	clear()
-	n = input("Creating new trackable\n\n  Enter name of the trackable: ")
-	clear()
-	q = input("Creating new trackable\n\n  Enter question you want to be asked: ")
+	valid = False
+	while not valid:
+		clear()
+		n = input("Creating new trackable\n\n  Enter name of the trackable: ")
+		valid = validator.validate_name(n, logger.get_trackables())
+	valid = False
+	while not valid:
+		clear()
+		q = input("Creating new trackable\n\n  Enter question you want to be asked: ")
+		valid = validator.validate_question(q)
 	valid = False
 	while not valid:
 		clear()
 		a = input("Creating new trackable\n\n  Enter answer type (str/bool/int/float) (default str): ")
-		valid = validator.validate_type_input(a)
+		valid = validator.validate_input_type(a)
 	clear()
 	p = input("Creating new trackable\n\n  How frequently the trackable should be tracked? (default: every day): ")
 	clear()
@@ -142,9 +140,8 @@ def creation_view():
 		p = None
 	logger.create_trackable(n, q, a, p)
 	clear()
-	print("\n\n  New trackable successfuly created!")
+	print("\n\n  New trackable created!")
 	time.sleep(1)
-	home_view()
 
 def list_view():
 	clear()
@@ -152,13 +149,32 @@ def list_view():
 	trackables = logger.get_trackables()
 	for t in trackables:
 		print("  - {}".format(t.get_beautiful_name()))
-	input("\nPress Enter to get back")
+	input("\nPress Enter")
 
 def deletion_view():
-	pass
+	clear()
+	trackables = logger.get_trackables()
+	d = { i+1 : t for i, t in enumerate(trackables)}
+	print("Deletion Menu\n")
+	for i in range(1, len(trackables)+1):
+		print("  {} - {}".format(i, d[i].get_beautiful_name()))
+	code = input("\nEnter trackable's code to delete this trackable: ")
+	deletion_confirmation_view(d[int(code)])
+
+def deletion_confirmation_view(trackable):
+	clear()
+	print("\n\nWARNING!\n  You are about to delete '{}' trackable.".format(trackable.get_beautiful_name()))
+	inp = input("  Are you sure you want to proceed (y/n)? ")
+	if inp == "y" or inp == "Y" or inp == "":
+		logger.delete_trackable(trackable)
+		clear()
+		print("\n\n  Trackable '{}' is deleted".format(trackable.get_beautiful_name()))
+		time.sleep(1.5)
+	else:
+		clear()
+		print("\n\n  No changes made")
+		time.sleep(1.5)
+
 
 def edit_view():
 	pass
-
-
-home_view()

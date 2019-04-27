@@ -31,4 +31,4 @@ class TimeHandler():
 
 	def n_days_ago(self, n):
 		n = int(n)
-		return (datetime.datetime.strptime(today(),"%Y-%m-%d")-datetime.timedelta(n)).strftime("%Y-%m-%d")
+		return (datetime.datetime.strptime(self.today(),"%Y-%m-%d")-datetime.timedelta(n)).strftime("%Y-%m-%d")

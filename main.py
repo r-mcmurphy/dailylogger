@@ -1,7 +1,6 @@
-## TODO: Implement deletion
-## TODO: Implement validation of new trackable's name
+## TODO: Redesign trackables' storage. It should be just list.
 
-import views
+from views import home_view
 
 def main():
 	home_view()
