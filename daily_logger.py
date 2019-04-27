@@ -2,14 +2,14 @@ import os
 import sys
 import json
 import datetime
-from trackable import Trackable, Validator
+from trackable import Trackable
 
 
-CONFIG_FILE = "config.json"
+TRACKABLES_FILE = "trackables.json"
 LOG_FILE = "daily_log.json"
 
 class DailyLogger():
-	
+
 	def __init__(self):
 		self.check_files()
 		self.trackables = []
@@ -17,9 +17,9 @@ class DailyLogger():
 			self.trackables.append(Trackable(t["name"], t["question"], t["answer_type"], t["period"]))
 
 	def check_files(self):
-		if CONFIG_FILE not in os.listdir():
+		if TRACKABLES_FILE not in os.listdir():
 			data = {"trackables":[]}
-			with open(CONFIG_FILE, "w") as f:
+			with open(TRACKABLES_FILE, "w") as f:
 				json.dump(data, f)
 		if LOG_FILE not in os.listdir():
 			data = {}
@@ -27,22 +27,31 @@ class DailyLogger():
 				json.dump(data, f)
 
 	def restore_trackables(self):
-		with open(CONFIG_FILE) as f:
+		with open(TRACKABLES_FILE) as f:
 			data = json.load(f)
 		return data["trackables"]
 
+	def get_trackables(self):
+		return self.trackables
+
 	def save_trackables(self):
-		with open(CONFIG_FILE) as f:
+		with open(TRACKABLES_FILE) as f:
 			data = json.load(f)
 		data["trackables"] = []
 		for t in self.trackables:
 			data["trackables"].append({"name":t.name, "question":t.question, "answer_type":t.answer_type, "period":t.period})
-		with open(CONFIG_FILE, "w") as f:
+		with open(TRACKABLES_FILE, "w") as f:
 			json.dump(data, f, indent=2, sort_keys=True)
 
 	def create_trackable(self, name, question, answer_type="str", period=None):
 		t = Trackable(name, question, answer_type, period)
 		self.trackables.append(t)
+		self.save_trackables()
+
+	def delete_trackable(self, name):
+		for t in self.trackables:
+			if t.name == name:
+				self.trackables.remove(t)
 		self.save_trackables()
 
 	def get_trackables_of_day(self, day):
