@@ -96,9 +96,11 @@ def logger_user_input_view(day):
 		valid = False
 		while not valid:
 			clear()
-			print("You are editing data on {}".format(day))
-			answer = input(t.question + " ")
-			valid = validator.validate_answer(answer, t)
+			print("You are editing data on {}\n".format(day))
+			answer = input("  " + t.question + " ")
+			valid = validator.validate_answer_type(answer, t)
+			if valid:
+				valid = validator.validate_range(answer, t.low, t.high)
 		answer = validator.process_answer(answer, t)
 		entry[day][t.name] = t.get_answer_type()(answer)
 	logger.log_day(entry)
@@ -124,13 +126,19 @@ def creation_view():
 	valid = False
 	while not valid:
 		clear()
-		q = input("Creating new trackable\n\n  Enter question you want to be asked: ")
+		q = input("Creating new trackable\n\n  Enter question you want to be asked: ").strip()
 		valid = validator.validate_question(q)
 	valid = False
 	while not valid:
 		clear()
 		a = input("Creating new trackable\n\n  Enter answer type (str/bool/int/float) (default str): ")
 		valid = validator.validate_input_type(a)
+	l, h = None, None
+	if a == "int" or a == "float":
+		clear()
+		l = int(input("Creating new trackable\n\n  Enter lower bound: "))
+		clear()
+		h = int(input("Creating new trackable\n\n  Enter upper bound (inclusive): "))
 	clear()
 	p = input("Creating new trackable\n\n  How frequently the trackable should be tracked? (default: every day): ")
 	clear()
@@ -138,7 +146,9 @@ def creation_view():
 		a = "str"
 	if p == "":
 		p = None
-	logger.create_trackable(n, q, a, p)
+	if q[-1] != "?":
+		q += "?"
+	logger.create_trackable(n, q, a, l, h, p)
 	clear()
 	print("\n\n  New trackable created!")
 	time.sleep(1)

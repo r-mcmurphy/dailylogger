@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 import datetime
 from trackable import Trackable
@@ -9,12 +8,11 @@ TRACKABLES_FILE = "trackables.json"
 LOG_FILE = "daily_log.json"
 
 class DailyLogger():
-
 	def __init__(self):
 		self.check_files()
 		self.trackables = []
 		for t in self.restore_trackables():
-			self.trackables.append(Trackable(t["name"], t["question"], t["answer_type"], t["period"]))
+			self.trackables.append(Trackable(t["name"], t["question"], t["answer_type"], t["low"], t["high"], t["period"]))
 
 	def check_files(self):
 		if TRACKABLES_FILE not in os.listdir():
@@ -39,12 +37,12 @@ class DailyLogger():
 			data = json.load(f)
 		data["trackables"] = []
 		for t in self.trackables:
-			data["trackables"].append({"name":t.name, "question":t.question, "answer_type":t.answer_type, "period":t.period})
+			data["trackables"].append({"name":t.name, "question":t.question, "answer_type":t.answer_type, "low":t.low, "high":t.high, "period":t.period})
 		with open(TRACKABLES_FILE, "w") as f:
 			json.dump(data, f, indent=2, sort_keys=True)
 
-	def create_trackable(self, name, question, answer_type="str", period=None):
-		t = Trackable(name, question, answer_type, period)
+	def create_trackable(self, name, question, answer_type="str", low=None, high=None,  period=None):
+		t = Trackable(name, question, answer_type, low, high, period)
 		self.trackables.append(t)
 		self.save_trackables()
 

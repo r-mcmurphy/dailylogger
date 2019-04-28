@@ -9,6 +9,14 @@ class Validator():
 			return False
 		return True
 
+	def validate_range(self, inp, low, high):
+		if low == None and high == None:
+			return True
+		if float(inp) < low or float(inp) > high:
+			return False
+		else:
+			return True
+
 	def validate_name(self, name, trackables):
 		if name == "":
 			return False
@@ -24,7 +32,7 @@ class Validator():
 		else:
 			return True
 
-	def validate_answer(self, ans, trackable):
+	def validate_answer_type(self, ans, trackable):
 		"""Returns False if answer is of incorrect type."""
 		try:
 			answer_type = trackable.get_answer_type()

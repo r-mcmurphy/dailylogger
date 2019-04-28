@@ -32,3 +32,19 @@ class TimeHandler():
 	def n_days_ago(self, n):
 		n = int(n)
 		return (datetime.datetime.strptime(self.today(),"%Y-%m-%d")-datetime.timedelta(n)).strftime("%Y-%m-%d")
+
+	def check_date(self, day, trackable):
+		day = datetime.datetime.strptime(day, "%Y-%m-%d")
+		timestmp = trackable.period
+		if timestmp[0] == "W":
+			for d, ch in enumerate(timestmp[1:]):
+				if ch == "1" and day.weekday() == d:
+					return True
+			else:
+				return False
+		elif timestmp[0] == "M":
+			pass
+		elif timestmp[0] == "Y":
+			pass
+		elif timestmp[0] == "P":
+			pass
