@@ -43,8 +43,27 @@ class TimeHandler():
 			else:
 				return False
 		elif timestmp[0] == "M":
-			pass
+			s = timestmp[1:]
+			days = [int(s[i:i+2]) for i in range(0, len(s), 2)]
+			if day.day in days:
+				return True
+			else:
+				return False
 		elif timestmp[0] == "Y":
-			pass
+			s = timestmp[1:]
+			days = [(int(s[i:i+4][:2]), int(s[i:i+4][2:])) for i in range(0, len(s), 4)]
+			for d in days:
+				if d[0] == day.month and d[1] == day.day:
+					return True
+			else:
+				return False
 		elif timestmp[0] == "P":
-			pass
+			tday = datetime.datetime.today()
+			s = timestmp[1:]
+			start, active_dur, inactive_dur = s.split(" ")
+			start = datetime.datetime.strptime(day, "%Y-%m-%d")
+			active_dur = int(active_dur)
+			inactive_dur = int(inactive_dur)
+			if tday - start < 0:
+				return False
+			# FINISH IT

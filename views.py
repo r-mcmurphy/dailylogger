@@ -30,7 +30,7 @@ def home_view():
 		print("  'q'   -->   exit\n")
 		inp = input("What do you want? ").strip().lower()
 		if inp == "":
-			logger_view()
+			logger_menu_view()
 		elif inp == "n":
 			creation_view()
 		elif inp == "d":
@@ -47,7 +47,7 @@ def home_view():
 		else:
 			pass
 
-def logger_view():
+def logger_menu_view():
 	while 1:
 		tday = thandler.today()
 		clear()
@@ -92,7 +92,9 @@ def logger_confirmation_view(day):
 def logger_user_input_view(day):
 	entry = {}
 	entry[day] = {}
-	for t in logger.get_trackables_of_day(day):
+	for t in logger.get_trackables():
+		if thandler.check_date(day, t) == False:
+			continue
 		valid = False
 		while not valid:
 			clear()
@@ -145,7 +147,7 @@ def creation_view():
 	if a == "":
 		a = "str"
 	if p == "":
-		p = None
+		p = "W1111111"
 	if q[-1] != "?":
 		q += "?"
 	logger.create_trackable(n, q, a, l, h, p)
@@ -184,7 +186,6 @@ def deletion_confirmation_view(trackable):
 		clear()
 		print("\n\n  No changes made")
 		time.sleep(1.5)
-
 
 def edit_view():
 	pass

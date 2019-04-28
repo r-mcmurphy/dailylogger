@@ -51,7 +51,6 @@ class DailyLogger():
 		self.save_trackables()
 
 	def get_trackables_of_day(self, day):
-		"""Returns trackables for a specified day"""
 		to_log = []
 		for trackable in self.trackables:
 			to_log.append(trackable)
