@@ -25,8 +25,8 @@ def home_view():
 		print("  n  >  create new trackable")
 		print("  d  >  delete existing trackable")
 		# print("  e  >  edit existing trackable") # Coming soon
-		print("  l  >  list all trackables")
-		print("  s  >  show log contents")
+		print("  l  >  list trackables")
+		print("  s  >  show log")
 		print("  q  >  exit\n")
 		inp = input("What do you want? ").strip().lower()
 		if inp == "":
@@ -135,7 +135,7 @@ def creation_view():
 	valid = False
 	while not valid:
 		clear()
-		t = input("Creating new trackable\n\n  Enter the answer type (str/bool/int/float) (default str): ")
+		t = input("Creating new trackable\n\n  Enter the answer type (str/bool/int/float) (default str): ").strip().lower()
 		valid = validator.validate_input_type(t)
 	l, h = None, None
 	if t == "int" or t == "float":
@@ -152,6 +152,7 @@ def creation_view():
 		p = "W1111111"
 	if q[-1] != "?":
 		q += "?"
+	q = q.capitalize()
 	logmgr.create_trackable(n,q,t,l,h,p)
 	clear()
 	print("\n  New trackable created!")
@@ -163,6 +164,12 @@ def list_view():
 	trackables = logmgr.get_trackables()
 	for t in trackables:
 		print("  - {}".format(t.get_beautiful_name()))
+		print("      question: {}".format(t.question))
+		print("      type: {}".format(t.answer_type))
+		if t.low != None:
+			print("      lower: {}".format(t.low))
+			print("      upper: {}".format(t.high))
+		print("      period: {}\n".format(t.period))
 	input("\nPress Enter")
 
 def deletion_view():
@@ -192,4 +199,4 @@ def deletion_confirmation_view(trackable):
 		time.sleep(1.5)
 
 def edit_view(): # To edit trackables' names, questions, ranges, and periods
-	pass 		 # There's no option to edit ans_type because it would affect log consistency
+	pass 		 # We don't edit ans_type because it would affect log consistency
