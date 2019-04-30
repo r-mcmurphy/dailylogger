@@ -1,6 +1,5 @@
 *.json
 *.pp3
-log_day.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
