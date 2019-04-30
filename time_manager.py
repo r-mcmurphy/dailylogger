@@ -1,6 +1,6 @@
 import datetime
 
-class TimeHandler():
+class TimeManager():
 	def __init__(self):
 		pass
 		
@@ -36,20 +36,20 @@ class TimeHandler():
 	def check_date(self, day, trackable):
 		day = datetime.datetime.strptime(day, "%Y-%m-%d")
 		timestmp = trackable.period
-		if timestmp[0] == "W":
+		if timestmp[0] == "W": # Each digit specifies one weekday
 			for d, ch in enumerate(timestmp[1:]):
 				if ch == "1" and day.weekday() == d:
 					return True
 			else:
 				return False
-		elif timestmp[0] == "M":
+		elif timestmp[0] == "M": # Each 2 digits specify the monthday
 			s = timestmp[1:]
 			days = [int(s[i:i+2]) for i in range(0, len(s), 2)]
 			if day.day in days:
 				return True
 			else:
 				return False
-		elif timestmp[0] == "Y":
+		elif timestmp[0] == "Y": # Each 4 digits specify the number of month and the number of day (MMDD)
 			s = timestmp[1:]
 			days = [(int(s[i:i+4][:2]), int(s[i:i+4][2:])) for i in range(0, len(s), 4)]
 			for d in days:
@@ -57,7 +57,7 @@ class TimeHandler():
 					return True
 			else:
 				return False
-		elif timestmp[0] == "P":
+		elif timestmp[0] == "P": # This is meant to track actions that take place periodically
 			tday = datetime.datetime.today()
 			s = timestmp[1:]
 			start, active_dur, inactive_dur = s.split(" ")
@@ -65,5 +65,5 @@ class TimeHandler():
 			active_dur = int(active_dur)
 			inactive_dur = int(inactive_dur)
 			if tday - start < 0:
-				return False
-			# FINISH IT
+				return False # At the moment of creation I don't feel the need for that feature
+			return False	 # So it's not done yet

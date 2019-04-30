@@ -1,5 +1,5 @@
 import datetime
-from time_handler import TimeHandler
+from time_manager import TimeManager
 
 class DummyTrackable():
 	def __init__(self, period):
@@ -45,7 +45,7 @@ days = [day1, day2, day3, day4, day5, day6, day7]
 dummies_w = [dummy_w1, dummy_w2, dummy_w3, dummy_w4, dummy_w5, dummy_w6, dummy_w7, dummy_w8, dummy_w9]
 dummies_m = [dummy_m1, dummy_m2, dummy_m3, dummy_m4, dummy_m5, dummy_m6, dummy_m7, dummy_m8]
 dummies_y = [dummy_y1, dummy_y2, dummy_y3, dummy_y4, dummy_y5, dummy_y6, dummy_y7, dummy_y8]
-thandler = TimeHandler()
+thandler = TimeManager()
 
 def perform_weekday_test():
 	for dummy_w in dummies:
