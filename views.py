@@ -160,8 +160,11 @@ def creation_view():
 
 def list_view():
 	clear()
-	print("Your trackables:\n")
 	trackables = logmgr.get_trackables()
+	if len(trackables) == 0:
+		print("\n  You have nothing to track yet\n")
+	else:
+		print("Your trackables:\n")
 	for t in trackables:
 		print("  - {}".format(t.get_beautiful_name()))
 		print("      question: {}".format(t.question))
@@ -170,7 +173,8 @@ def list_view():
 			print("      lower: {}".format(t.low))
 			print("      upper: {}".format(t.high))
 		print("      period: {}\n".format(t.period))
-	input("\nPress Enter")
+	print("  {} trackables at all\n".format(len(trackables)))
+	input("Press Enter")
 
 def deletion_view():
 	clear()
