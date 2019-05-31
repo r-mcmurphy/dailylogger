@@ -6,9 +6,8 @@ class TimeManager():
 		
 	def today(self):
 		td = datetime.datetime.now()
-		year, month, day = td.year, td.month, td.day-1
-		if td.hour < 7:
-			td = datetime.datetime(year, month, day)
+		if td.hour < 12:
+			td = td - datetime.timedelta(days=1)
 		datestr = td.strftime("%Y-%m-%d")
 		return datestr
 
