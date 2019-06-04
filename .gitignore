@@ -1,6 +1,11 @@
 *.json
 *.pp3
 
+# These are irrelevant
+tests.py
+log_day.py
+TODO.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

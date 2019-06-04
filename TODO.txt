@@ -1,3 +1,5 @@
+- Finish periodization system
+
 - Create analytical system 
 	It should:
 		- give raw numbers
@@ -9,5 +11,3 @@
 	It should:
 		- draw graphs
 		- print data
-
-- Get rid of trailing tabs and spaces in all files

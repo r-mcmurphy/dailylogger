@@ -1,15 +1,17 @@
-from log_manager import LogManager, LOG_FILE
-from time_manager import TimeManager
+
+import os
+import sys
+import time
+import datetime
+
 from trackable import Trackable
 from validator import Validator
-import datetime
-import time
-import sys
-import os
+from time_manager import TimeManager
+from log_manager import LogManager, LOG_FILE
 
-logmgr = LogManager()
+log_mgr = LogManager()
+time_mgr = TimeManager()
 validator = Validator()
-thandler = TimeManager()
 
 def clear():
 	if os.name == 'nt':
@@ -30,7 +32,7 @@ def home_view():
 		print("  q  >  exit\n")
 		inp = input("What do you want? ").strip().lower()
 		if inp == "":
-			logmgr_menu_view()
+			log_mgr_menu_view()
 		elif inp == "n":
 			creation_view()
 		elif inp == "d":
@@ -47,9 +49,9 @@ def home_view():
 		else:
 			pass
 
-def logmgr_menu_view():
+def log_mgr_menu_view():
 	while 1:
-		tday = thandler.today()
+		tday = time_mgr.today()
 		clear()
 		print("Logger Menu\n")
 		print("  Enter   >  log the passed day ({})".format(tday))
@@ -67,18 +69,18 @@ def logmgr_menu_view():
 			clear()
 			sys.exit()
 		elif len(inp) >= 6:
-			day = thandler.get_specific_date(inp)
+			day = time_mgr.get_specific_date(inp)
 		elif len(inp) <= 2:
 			for i in inp:
 				if not i.isdigit():
 					break
 			else:
-				day = thandler.n_days_ago(inp)
+				day = time_mgr.n_days_ago(inp)
 		if day:
-			logmgr_confirmation_view(day)
+			log_mgr_confirmation_view(day)
 			break
 
-def logmgr_confirmation_view(day):
+def log_mgr_confirmation_view(day):
 	while 1:
 		clear()
 		# print("Life Logger v.2.0\n")
@@ -87,15 +89,15 @@ def logmgr_confirmation_view(day):
 		print("  anychar >  abort\n")
 		inp = input("Going on?: ").strip().lower()
 		if inp == "":
-			logmgr_user_input_view(day)
+			log_mgr_user_input_view(day)
 			break
 		else: break
 
-def logmgr_user_input_view(day):
+def log_mgr_user_input_view(day):
 	entry = {}
 	entry[day] = {}
-	for t in logmgr.get_trackables():
-		if thandler.check_date(day, t) == False:
+	for t in log_mgr.get_trackables():
+		if time_mgr.check_date(day, t) == False:
 			continue
 		valid = False
 		while not valid:
@@ -107,7 +109,7 @@ def logmgr_user_input_view(day):
 				valid = validator.validate_range(answer, t.low, t.high)
 		answer = validator.process_answer(answer, t)
 		entry[day][t.name] = t.get_answer_type()(answer)
-	logmgr.log_day(entry)
+	log_mgr.log_day(entry)
 	clear()
 	print(day, "successfuly logged!")
 	time.sleep(2)
@@ -126,7 +128,7 @@ def creation_view():
 	while not valid:
 		clear()
 		n = input("Creating new trackable\n\n  Enter trackable's name: ")
-		valid = validator.validate_name(n, logmgr.get_trackables())
+		valid = validator.validate_name(n, log_mgr.get_trackables())
 	valid = False
 	while not valid:
 		clear()
@@ -153,14 +155,14 @@ def creation_view():
 	if q[-1] != "?":
 		q += "?"
 	q = q.capitalize()
-	logmgr.create_trackable(n,q,t,l,h,p)
+	log_mgr.create_trackable(n,q,t,l,h,p)
 	clear()
 	print("\n  New trackable created!")
 	time.sleep(1)
 
 def list_view():
 	clear()
-	trackables = logmgr.get_trackables()
+	trackables = log_mgr.get_trackables()
 	if len(trackables) == 0:
 		print("\n  You have nothing to track yet\n")
 	else:
@@ -178,7 +180,7 @@ def list_view():
 
 def deletion_view():
 	clear()
-	trackables = logmgr.get_trackables()
+	trackables = log_mgr.get_trackables()
 	d = { i+1 : t for i, t in enumerate(trackables)}
 	print("Deletion Menu\n")
 	for i in range(1, len(trackables)+1):
@@ -193,7 +195,7 @@ def deletion_confirmation_view(trackable):
 	print("\n\nWARNING!\n  You are about to delete '{}' trackable.".format(trackable.get_beautiful_name()))
 	inp = input("  Are you sure you want to proceed (y/n)? ")
 	if inp == "y" or inp == "Y" or inp == "":
-		logmgr.delete_trackable(trackable)
+		log_mgr.delete_trackable(trackable)
 		clear()
 		print("\n  Trackable '{}' is deleted".format(trackable.get_beautiful_name()))
 		time.sleep(1.5)
