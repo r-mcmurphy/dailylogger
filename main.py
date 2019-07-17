@@ -1,6 +1,6 @@
 from views import home_view
 
 def main():
-	home_view()
+    home_view()
 
 main()
