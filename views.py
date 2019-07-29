@@ -42,7 +42,7 @@ def home_view():
         print("  s  >  show log")
         print("  q  >  exit\n")
         inp = input(">>> ").strip().lower()
-        if inp == "":
+        if inp == "" and len(missed_days) > 0:
             missed_days_based_logging_view(missed_days)
         elif inp == "m":
             log_mgr_menu_view()
@@ -68,7 +68,9 @@ def missed_days_based_logging_view(missed_days):
     while 1:
         clear()
         print("Daily Logger v.2.1\n")
-        if len(missed_days) > 1:
+        if len(missed_days) == 0:
+            print("  Your log is up to date!")
+        elif len(missed_days) > 1:
             print("  You didn't log these days:\n")
         else:
             print("  One day to log:\n")
@@ -238,3 +240,4 @@ def deletion_confirmation_view(trackable):
 
 def edit_view(): # To edit trackables' names, questions, ranges, and periods
     pass         # We don't edit ans_type because it would affect log consistency
+
