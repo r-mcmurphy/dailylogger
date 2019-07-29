@@ -48,6 +48,7 @@ class TimeManager():
                 -datetime.timedelta(n)).strftime("%Y-%m-%d")
 
     def get_all_missed_days(self, log_mgr):
+        """Returns list of string formatted days that don't have entry in log"""
         tday = datetime.datetime.strptime(self.today(),"%Y-%m-%d")
         data = log_mgr.get_log_data()
         first_day = sorted(data.keys())[0]

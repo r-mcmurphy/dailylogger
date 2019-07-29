@@ -24,20 +24,28 @@ def clear():
 
 def home_view():
     while 1:
+        missed_days = time_mgr.get_all_missed_days(log_mgr)
         clear()
         print("Daily Logger v.2.1\n")
-        print("  Press Enter to log a day\n")
+        if len(missed_days) > 0:
+            print("  Dear user, your log is inconsistent.")
+            print("  Press Enter to fill the gaps!\n")
+            print("  Or pick one of the options below:")
+        else:
+            print("  Welcome back, dear user! Your log is up to date! Good job!\n")
+        print("  m  >  log specfic date")
         print("  n  >  create new trackable")
         print("  d  >  delete existing trackable")
-        # print("  e  >  edit existing trackable") # Coming soon
-        print("  l  >  list trackables")
+        print("  l  >  list all trackables")
+        # print("  e  >  edit existing trackable") # Coming soon... maybe?
         # print("  a  >  show analytics")
         print("  s  >  show log")
         print("  q  >  exit\n")
         inp = input(">>> ").strip().lower()
         if inp == "":
-            missed_days_based_logging_view() # THIS IS VERY EXPERMENTAL, IT NEEDS SOME TESTING
-            # log_mgr_menu_view()
+            missed_days_based_logging_view(missed_days)
+        elif inp == "m":
+            log_mgr_menu_view()
         elif inp == "n":
             creation_view()
         elif inp == "d":
@@ -56,23 +64,23 @@ def home_view():
         else:
             pass
 
-def missed_days_based_logging_view(): # THIS IS VERY EXPERMENTAL, IT NEEDS REFACTORING
+def missed_days_based_logging_view(missed_days):
     while 1:
         clear()
-        missed_days = time_mgr.get_all_missed_days(log_mgr)
-        if len(missed_days) > 0:
-            print("\n  Dear user, you missed logging some days:\n")
-            for day in missed_days:
-                print("    {}, {}".format(day, WEEKDAYS[datetime.datetime.strptime(day,"%Y-%m-%d").weekday()]))
-            print("\n  To keep your log consistent we recommend you to fill the gaps.\n")
-            inp = input("Wanna start right off? (y/n, default:y) >>> ").lower()
-            if inp == "" or "y" in inp:
-                for day in missed_days:
-                    log_mgr_confirmation_view(day)
-            else:
-                log_mgr_menu_view()
+        print("Daily Logger v.2.1\n")
+        if len(missed_days) > 1:
+            print("  You didn't log these days:\n")
         else:
-            log_mgr_menu_view()
+            print("  One day to log:\n")
+        for day in missed_days:
+            print("    - {}, {}".format(day, WEEKDAYS[datetime.datetime.strptime(day,"%Y-%m-%d").weekday()]))
+        inp = input("\nContinue? [yes]: ").lower()
+        if inp == "":
+            for day in missed_days:
+                log_mgr_confirmation_view(day)
+            break
+        else:
+            break
 
 def log_mgr_menu_view():
     while 1:
@@ -108,11 +116,8 @@ def log_mgr_menu_view():
 def log_mgr_confirmation_view(day):
     while 1:
         clear()
-        # print("Life Logger v.2.0\n")
-        print("\n  You're about to log {}".format(day))
-        print("  Enter   >  continue")
-        print("  anychar >  abort\n")
-        inp = input("Going on?: ").strip().lower()
+        print("\n  You're about to log {}, {}".format(day, WEEKDAYS[datetime.datetime.strptime(day,"%Y-%m-%d").weekday()]))
+        inp = input("\nGoing on? [yes]: ").strip().lower()
         if inp == "":
             log_mgr_user_input_view(day)
             break
@@ -233,7 +238,3 @@ def deletion_confirmation_view(trackable):
 
 def edit_view(): # To edit trackables' names, questions, ranges, and periods
     pass         # We don't edit ans_type because it would affect log consistency
-
-
-if __name__ == '__main__':
-    test_view()
