@@ -1,3 +1,4 @@
+import readline
 from views import home_view
 
 def main():
