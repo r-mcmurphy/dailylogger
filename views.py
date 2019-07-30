@@ -43,7 +43,7 @@ def home_view():
         print("  q  >  exit\n")
         inp = input(">>> ").strip().lower()
         if inp == "" and len(missed_days) > 0:
-            missed_days_based_logging_view(missed_days)
+            missed_days_view(missed_days)
         elif inp == "m":
             log_mgr_menu_view()
         elif inp == "n":
@@ -64,7 +64,7 @@ def home_view():
         else:
             pass
 
-def missed_days_based_logging_view(missed_days):
+def missed_days_view(missed_days):
     while 1:
         clear()
         print("Daily Logger v.2.1\n")
@@ -80,8 +80,10 @@ def missed_days_based_logging_view(missed_days):
         if inp == "":
             for day in missed_days:
                 log_mgr_confirmation_view(day)
+            clear()
             break
         else:
+            clear()
             break
 
 def log_mgr_menu_view():

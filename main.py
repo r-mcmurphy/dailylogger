@@ -1,8 +1,13 @@
+import sys
 import readline
-from views import home_view
+from views import home_view, missed_days_view, time_mgr, log_mgr
 
-def main():
-    home_view()
 
 if __name__ == '__main__':
-	main()
+    try:
+        if sys.argv[1] == "-l" or sys.argv[1] == "--log":
+            missed_days_view(time_mgr.get_all_missed_days(log_mgr))
+        else:
+            raise IndexError
+    except IndexError:
+        home_view()
