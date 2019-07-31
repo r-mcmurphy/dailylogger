@@ -4,16 +4,16 @@ import sys
 import time
 import datetime
 
-from analyzer import Analyzer
 from trackable import Trackable
 from validator import Validator
 from time_manager import TimeManager, WEEKDAYS
 from log_manager import LogManager, LOG_FILE
 
+
+os.chdir(os.path.dirname(os.path.abspath(__file__))) # To locate *.json files
 log_mgr = LogManager()
 time_mgr = TimeManager()
 validator = Validator()
-# analyzer = Analyzer()
 
 
 def clear():
