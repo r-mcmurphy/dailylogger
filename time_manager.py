@@ -1,5 +1,17 @@
 import datetime
 
+
+WEEKDAYS = {
+    0:'Monday',
+    1:'Tuesday',
+    2:'Wednesday',
+    3:'Thursday',
+    4:'Friday',
+    5:'Saturday',
+    6:'Sunday'
+}
+
+
 class TimeManager():
     def __init__(self):
         pass
@@ -34,6 +46,21 @@ class TimeManager():
         n = int(n)
         return (datetime.datetime.strptime(self.today(),"%Y-%m-%d")
                 -datetime.timedelta(n)).strftime("%Y-%m-%d")
+
+    def get_all_missed_days(self, log_mgr):
+        """Returns list of string formatted days that don't have entry in log"""
+        tday = datetime.datetime.strptime(self.today(),"%Y-%m-%d")
+        data = log_mgr.get_log_data()
+        first_day = sorted(data.keys())[0]
+        pointer = datetime.datetime.strptime(first_day, "%Y-%m-%d") + datetime.timedelta(1)
+        missed_days = []
+        while pointer != tday:
+            pointer += datetime.timedelta(1)
+            d = pointer.strftime("%Y-%m-%d")
+            if d not in data.keys():
+                missed_days.append(d)
+        return missed_days
+
 
     def check_date(self, day, trackable):
         day = datetime.datetime.strptime(day, "%Y-%m-%d")
