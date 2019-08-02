@@ -20,7 +20,7 @@ def clear():
     if os.name == 'nt':
         _ = os.system('cls')
     else:
-        _ = os.system('clear')
+        _ = os.system('clear && printf "\e[3J"')
 
 def home_view():
     while 1:
