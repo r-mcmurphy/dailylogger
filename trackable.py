@@ -1,5 +1,4 @@
-class Trackable():
-
+class Trackable:
     def __init__(self, name, question, answer_type, low=None, high=None, period=None):
         self.name = name.strip().lower().replace(" ", "_")
         self.question = question.strip()

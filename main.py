@@ -1,4 +1,3 @@
-import os
 import sys
 import readline
 from views import home_view, missed_days_view, time_mgr, log_mgr

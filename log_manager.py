@@ -1,21 +1,22 @@
 import os
 import json
-import datetime
 
 from trackable import Trackable
 
 TRACKABLES_FILE = "trackables.json"
 LOG_FILE = "daily_log.json"
 
-class LogManager():
+
+class LogManager:
     def __init__(self):
         self.check_files()
         self.trackables = []
         for t in self.restore_trackables():
-            self.trackables.append(Trackable(t["name"], t["question"], 
-                t["answer_type"], t["low"], t["high"], t["period"]))
+            self.trackables.append(Trackable(t["name"], t["question"],
+                                             t["answer_type"], t["low"], t["high"], t["period"]))
 
-    def check_files(self):
+    @staticmethod
+    def check_files():
         if TRACKABLES_FILE not in os.listdir():
             data = []
             with open(TRACKABLES_FILE, "w") as f:
@@ -25,7 +26,8 @@ class LogManager():
             with open(LOG_FILE, "w") as f:
                 json.dump(data, f)
 
-    def restore_trackables(self):
+    @staticmethod
+    def restore_trackables():
         with open(TRACKABLES_FILE) as f:
             data = json.load(f)
         return data
@@ -38,14 +40,14 @@ class LogManager():
             data = json.load(f)
         data = []
         for t in self.trackables:
-            data.append({"name":t.name, "question":t.question, 
-                "answer_type":t.answer_type, "low":t.low, "high":t.high, 
-                "period":t.period})
+            data.append({"name": t.name, "question": t.question,
+                         "answer_type": t.answer_type, "low": t.low, "high": t.high,
+                         "period": t.period})
         with open(TRACKABLES_FILE, "w") as f:
             json.dump(data, f, indent=2, sort_keys=True)
 
-    def create_trackable(self, name, question, answer_type="str", low=None, 
-        high=None,  period=None):
+    def create_trackable(self, name, question, answer_type="str", low=None,
+                         high=None, period=None):
         t = Trackable(name, question, answer_type, low, high, period)
         self.trackables.append(t)
         self.update_trackables()
@@ -54,12 +56,14 @@ class LogManager():
         self.trackables.remove(t)
         self.update_trackables()
 
-    def get_log_data(self):
+    @staticmethod
+    def get_log_data():
         with open(LOG_FILE) as f:
             data = json.load(f)
         return data
 
-    def save_log_data(self, data):
+    @staticmethod
+    def save_log_data(data):
         with open(LOG_FILE, "w") as f:
             json.dump(data, f, indent=2, sort_keys=True)
 

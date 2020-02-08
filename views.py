@@ -1,4 +1,3 @@
-
 import os
 import sys
 import time
@@ -9,8 +8,7 @@ from validator import Validator
 from time_manager import TimeManager, WEEKDAYS
 from log_manager import LogManager, LOG_FILE
 
-
-os.chdir(os.path.dirname(os.path.abspath(__file__))) # To locate *.json files
+os.chdir(os.path.dirname(os.path.abspath(__file__)))  # To locate *.json files
 log_mgr = LogManager()
 time_mgr = TimeManager()
 validator = Validator()
@@ -21,6 +19,7 @@ def clear():
         _ = os.system('cls')
     else:
         _ = os.system('clear && printf "\e[3J"')
+
 
 def home_view():
     while 1:
@@ -64,6 +63,7 @@ def home_view():
         else:
             pass
 
+
 def missed_days_view(missed_days):
     while 1:
         clear()
@@ -75,7 +75,7 @@ def missed_days_view(missed_days):
         else:
             print("  One day to log:\n")
         for day in missed_days:
-            print("    - {}, {}".format(day, WEEKDAYS[datetime.datetime.strptime(day,"%Y-%m-%d").weekday()]))
+            print("    - {}, {}".format(day, WEEKDAYS[datetime.datetime.strptime(day, "%Y-%m-%d").weekday()]))
         inp = input("\nContinue? [yes]: ").lower()
         if inp == "":
             for day in missed_days:
@@ -85,6 +85,7 @@ def missed_days_view(missed_days):
         else:
             clear()
             break
+
 
 def log_mgr_menu_view():
     while 1:
@@ -117,15 +118,19 @@ def log_mgr_menu_view():
             log_mgr_confirmation_view(day)
             break
 
+
 def log_mgr_confirmation_view(day):
     while 1:
         clear()
-        print("\n  You're about to log {}, {}".format(day, WEEKDAYS[datetime.datetime.strptime(day,"%Y-%m-%d").weekday()]))
+        print("\n  You're about to log {}, {}".format(day,
+                                                      WEEKDAYS[datetime.datetime.strptime(day, "%Y-%m-%d").weekday()]))
         inp = input("\nGoing on? [yes]: ").strip().lower()
         if inp == "":
             log_mgr_user_input_view(day)
             break
-        else: break
+        else:
+            break
+
 
 def log_mgr_user_input_view(day):
     entry = {}
@@ -149,15 +154,17 @@ def log_mgr_user_input_view(day):
     time.sleep(2)
     clear()
 
+
 def show_log_view():
     clear()
     print("Your log:")
-    with open (LOG_FILE, "r") as f:
+    with open(LOG_FILE, "r") as f:
         for line in f:
             print(line, end="")
     input("\n\nPress Enter")
 
-def creation_view():    
+
+def creation_view():
     valid = False
     while not valid:
         clear()
@@ -171,7 +178,8 @@ def creation_view():
     valid = False
     while not valid:
         clear()
-        t = input("Creating new trackable\n\n  Enter the answer type (str/bool/int/float) (default str): ").strip().lower()
+        t = input(
+            "Creating new trackable\n\n  Enter the answer type (str/bool/int/float) (default str): ").strip().lower()
         valid = validator.validate_input_type(t)
     l, h = None, None
     if t == "int" or t == "float":
@@ -189,10 +197,11 @@ def creation_view():
     if q[-1] != "?":
         q += "?"
     q = q.capitalize()
-    log_mgr.create_trackable(n,q,t,l,h,p)
+    log_mgr.create_trackable(n, q, t, l, h, p)
     clear()
     print("\n  New trackable created!")
     time.sleep(1)
+
 
 def list_view():
     clear()
@@ -212,19 +221,21 @@ def list_view():
     print("  {} trackables at all\n".format(len(trackables)))
     input("Press Enter")
 
+
 def deletion_view():
     clear()
     trackables = log_mgr.get_trackables()
-    d = { i+1 : t for i, t in enumerate(trackables)}
+    d = {i + 1: t for i, t in enumerate(trackables)}
     print("Deletion Menu\n")
-    for i in range(1, len(trackables)+1):
+    for i in range(1, len(trackables) + 1):
         print("  {} - {}".format(i, d[i].get_beautiful_name()))
     code = input("\nEnter code to delete trackable \nType anything else to abort: ")
-    try: 
+    try:
         if int(code) in d:
             deletion_confirmation_view(d[int(code)])
     except:
         pass
+
 
 def deletion_confirmation_view(trackable):
     clear()
@@ -240,6 +251,6 @@ def deletion_confirmation_view(trackable):
         print("\n\n  No changes made")
         time.sleep(1.5)
 
-def edit_view(): # To edit trackables' names, questions, ranges, and periods
-    pass         # We don't edit ans_type because it would affect log consistency
 
+def edit_view():  # To edit trackables' names, questions, ranges, and periods
+    pass  # We don't edit ans_type because it would affect log consistency

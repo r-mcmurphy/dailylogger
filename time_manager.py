@@ -2,28 +2,30 @@ import datetime
 
 
 WEEKDAYS = {
-    0:'Monday',
-    1:'Tuesday',
-    2:'Wednesday',
-    3:'Thursday',
-    4:'Friday',
-    5:'Saturday',
-    6:'Sunday'
+    0: 'Monday',
+    1: 'Tuesday',
+    2: 'Wednesday',
+    3: 'Thursday',
+    4: 'Friday',
+    5: 'Saturday',
+    6: 'Sunday'
 }
 
 
-class TimeManager():
+class TimeManager:
     def __init__(self):
         pass
-        
-    def today(self):
+
+    @staticmethod
+    def today():
         td = datetime.datetime.now()
         if td.hour < 12:
             td = td - datetime.timedelta(days=1)
         datestr = td.strftime("%Y-%m-%d")
         return datestr
 
-    def get_specific_date(self, datestr):
+    @staticmethod
+    def get_specific_date(datestr):
         str_res = ""
         for c in datestr:
             if c.isdigit():
@@ -61,8 +63,8 @@ class TimeManager():
                 missed_days.append(d)
         return missed_days
 
-
-    def check_date(self, day, trackable):
+    @staticmethod
+    def check_date(day, trackable):
         day = datetime.datetime.strptime(day, "%Y-%m-%d")
         timestmp = trackable.period
         if timestmp[0] == "W": # Each digit specifies one weekday
@@ -78,8 +80,8 @@ class TimeManager():
                 return True
             else:
                 return False
-        elif timestmp[0] == "Y": # Each 4 digits specify the number of month
-            s = timestmp[1:]     # and the number of day (MMDD)
+        elif timestmp[0] == "Y":  # Each 4 digits specify the number of month
+            s = timestmp[1:]      # and the number of day (MMDD)
             days = [(int(s[i:i+4][:2]), int(s[i:i+4][2:])) for i in range(0, len(s), 4)]
             for d in days:
                 if d[0] == day.month and d[1] == day.day:
@@ -94,5 +96,5 @@ class TimeManager():
             active_dur = int(active_dur)
             inactive_dur = int(inactive_dur)
             if tday - start < 0:
-                return False # At the moment of creation I don't feel the need
-            return False     # for that feature, so it's not done yet
+                return False  # At the moment of creation I don't feel the need
+            return False      # for that feature, so it's not done yet
