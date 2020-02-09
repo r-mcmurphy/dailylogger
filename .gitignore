@@ -5,6 +5,7 @@
 tests.py
 log_day.py
 TODO.txt
+.idea
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
