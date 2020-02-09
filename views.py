@@ -77,7 +77,7 @@ def missed_days_view(missed_days):
         for day in missed_days:
             print("    - {}, {}".format(day, WEEKDAYS[datetime.datetime.strptime(day, "%Y-%m-%d").weekday()]))
         inp = input("\nContinue? [yes]: ").lower()
-        if inp == "":
+        if inp == "" or inp.lower() in validator.truths:
             for day in missed_days:
                 log_mgr_confirmation_view(day)
             clear()
@@ -133,10 +133,9 @@ def log_mgr_confirmation_view(day):
 
 
 def log_mgr_user_input_view(day):
-    entry = {}
-    entry[day] = {}
+    entry = {day: {}}
     for t in log_mgr.get_trackables():
-        if time_mgr.check_date(day, t) == False:
+        if not time_mgr.check_date(day, t):
             continue
         valid = False
         while not valid:
@@ -214,7 +213,7 @@ def list_view():
         print("  - {}".format(t.get_beautiful_name()))
         print("      question: {}".format(t.question))
         print("      type: {}".format(t.answer_type))
-        if t.low != None:
+        if t.low is not None:
             print("      lower: {}".format(t.low))
             print("      upper: {}".format(t.high))
         print("      period: {}\n".format(t.period))

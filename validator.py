@@ -2,6 +2,7 @@ class Validator:
     def __init__(self):
         self.types = ["int", "float", "str", "bool", ""]
         self.falses = ["no", "false", "nope", "0", "never", "noway", "n"]
+        self.truths = ['yes', 'yep', '1', 'true', 't', 'ok', 'good', 'sure']
 
     def validate_input_type(self, inp):
         if inp not in self.types:
